@@ -13,7 +13,6 @@ async function getDynamoDBTableResources() {
 }
 ;(async function main() {
   console.info('Setting up local DynamoDB tables')
-  console.info(process.env.AWS_ACCESS_KEY_ID)
   const tables = await getDynamoDBTableResources()
   const existingTables = (await SERVER.ddb.listTables().promise())
     .TableNames

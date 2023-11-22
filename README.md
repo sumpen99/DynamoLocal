@@ -12,3 +12,5 @@
 
 - npm run down [ shutdown docker container ]
 
+
+// https://github.com/sumpen99/DynamoLocal
