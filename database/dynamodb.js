@@ -28,7 +28,6 @@ module.exports = {
     fs:fs,
     TABLES:{
         EXAMPLE:"example",
-        HOTELS:"HOTELS.COM",
     },
     GSI:{
         GSI_PRIMARY:"GSI_1"
