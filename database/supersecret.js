@@ -1,0 +1,6 @@
+
+
+module.exports = {
+    API_KEY:"MY_SUPER_SECRET_API_KEY",
+    APP_KEY:"MY_SUPER_SECRET_APP_KEY"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "example",
+    "scripts": {
+        "setup:dynamodb": "node create-tables-locally.js",
+        "write-hotelrooms-to-dynamodb": "node generate_hotel_rooms.js",
+        "up": "docker-compose up -d",
+        "postup": "npm run setup:dynamodb && npm run write-hotelrooms-to-dynamodb",
+        "down": "docker-compose down",
+        "test": "jest --passWithNoTests",
+        "pretest:watch": "npm run up",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {
+        "aws-sdk": "2.906.0",
+        "bcrypt": "^5.1.1",
+        "bcryptjs": "^2.4.3",
+        "bluebird": "^3.7.2",
+        "jsonwebtoken": "^9.0.2"
+    },
+    "devDependencies": {
+        "jest": "27.0.6",
+        "js-yaml": "4.1.0",
+        "nanoid": "3.1.23",
+        "serverless": "2.55.0"
+    }
+}

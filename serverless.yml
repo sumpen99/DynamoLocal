@@ -1,0 +1,78 @@
+service: example
+provider:
+  name: aws
+  runtime: nodejs14.x
+functions:
+  example:
+    description: An example lambda function
+    handler: example.handler
+    memorySize: 256
+    # adding the following:
+    role: LambdaRole
+    environment:
+      DYNAMODB_TABLE: !Ref DynamoDBExampleTable
+
+resources:
+  Resources:
+    DynamoDBExampleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: example
+        SSESpecification:
+          SSEEnabled: true
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S
+          - AttributeName: SK
+            AttributeType: S
+          - AttributeName: PK_1
+            AttributeType: S
+          - AttributeName: SK_1
+            AttributeType: S
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: GSI_1
+            KeySchema:
+              - AttributeName: PK_1
+                KeyType: HASH
+              - AttributeName: SK_1
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+    LambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        Policies:
+          - PolicyName: dynamodb
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - 'dynamodb:BatchGetItem'
+                    - 'dynamodb:BatchWriteItem'
+                    - 'dynamodb:PutItem'
+                    - 'dynamodb:DeleteItem'
+                    - 'dynamodb:GetItem'
+                    - 'dynamodb:Scan'
+                    - 'dynamodb:Query'
+                    - 'dynamodb:UpdateItem'
+                    - 'dynamodb:PartiQL*'
+                  Resource:
+                    - !GetAtt DynamoDBExampleTable.Arn
+                    - !Sub
+                      - ${Table}/*
+                      - Table: !GetAtt DynamoDBExampleTable.Arn
